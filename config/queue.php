@@ -65,6 +65,57 @@ return [
             'block_for' => null,
         ],
 
+        'rabbitmq' => [
+
+            'driver' => 'rabbitmq',
+            'queue' => env('RABBITMQ_QUEUE', 'order2.fanout'),
+            'connection' => PhpAmqpLib\Connection\AMQPLazyConnection::class,
+
+            'hosts' => [
+                [
+                    'host' => env('RABBITMQ_HOST', '127.0.0.1'),
+                    'port' => env('RABBITMQ_PORT', 15672),
+                    'user' => env('RABBITMQ_USER', 'guest'),
+                    'password' => env('RABBITMQ_PASSWORD', 'guest'),
+                    'vhost' => env('RABBITMQ_VHOST', '/'),
+                ],
+            ],
+
+            'options' => [
+                'exchange' => [
+
+                    'name' => env('RABBITMQ_EXCHANGE_NAME', 'order.fanout'),
+
+                    /*
+                 * Determine if exchange should be created if it does not exist.
+                 */
+
+                    'declare' => env('RABBITMQ_EXCHANGE_DECLARE', true),
+
+                    /*
+                 * Read more about possible values at https://www.rabbitmq.com/tutorials/amqp-concepts.html
+                 */
+
+                    'type' => env('RABBITMQ_EXCHANGE_TYPE', AMQP_EX_TYPE_FANOUT),
+                    'passive' => env('RABBITMQ_EXCHANGE_PASSIVE', false)
+                ],
+                'ssl_options' => [
+                    'cafile' => env('RABBITMQ_SSL_CAFILE', null),
+                    'local_cert' => env('RABBITMQ_SSL_LOCALCERT', null),
+                    'local_key' => env('RABBITMQ_SSL_LOCALKEY', null),
+                    'verify_peer' => env('RABBITMQ_SSL_VERIFY_PEER', true),
+                    'passphrase' => env('RABBITMQ_SSL_PASSPHRASE', null),
+                ],
+            ],
+
+            /*
+             * Set to "horizon" if you wish to use Laravel Horizon.
+             */
+            'worker' => env('RABBITMQ_WORKER', 'default'),
+
+        ],
+
+
     ],
 
     /*
